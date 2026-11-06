@@ -1,6 +1,6 @@
 /* ==========================================================================
    PIXEL ART THEME  |  Retro 8-bit / Famicube console styling
-   Cosmetic-only update. JavaScript is NOT modified.
+   Responsive update. JavaScript is NOT modified.
    ========================================================================== */
 
 /* --- Chunky 8-bit pixel font (Press Start 2P) --- */
@@ -23,6 +23,14 @@
     --text-dim:  #aeb9cc;
 
     --pixel:     #ff2d2d;
+
+    /* Fluid sizes: clamp(min, preferred, max) */
+    --fs-h1:     clamp(1.1rem, 4.5vw + 0.3rem, 2.3rem);
+    --fs-h3:     clamp(0.8rem, 2.5vw + 0.3rem, 1.2rem);
+    --fs-body:   clamp(0.6rem, 1.8vw + 0.2rem, 1rem);
+    --fs-btn:    clamp(0.55rem, 1.6vw + 0.2rem, 0.8rem);
+    --fs-q:      clamp(0.7rem, 2.4vw + 0.2rem, 1.3rem);
+    --pad:       clamp(0.7em, 3vw, 1.4em);
 }
 
 * {
@@ -32,9 +40,16 @@
     font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
 }
 
+/* Stop long words from breaking the layout on small screens */
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
 /* ---- Page background + 8-bit dot grid ---- */
 body {
     min-height: 100vh;
+    min-height: 100dvh; /* fixes mobile browser address-bar jump */
+    padding: 1rem 0.75rem;
     background-color: var(--bg);
     background-image:
         radial-gradient(circle, var(--cyan) 1px, transparent 1px),
@@ -47,8 +62,8 @@ body {
     justify-content: center;
     color: var(--text);
     position: relative;
-    gap: 0.5rem;
-    
+    gap: 0.75rem;
+    overflow-wrap: anywhere;
 }
 
 /* ---- Headings ---- */
@@ -57,7 +72,8 @@ h1, h2, h3 {
 }
 
 h1 {
-    font-size: 2.3rem;
+    font-size: var(--fs-h1);
+    line-height: 1.4;
     text-align: center;
     text-shadow:
         2px 2px 0 var(--pixel),
@@ -67,7 +83,7 @@ h1 {
 
 /* ---- Score (during the game) ---- */
 #score {
-    font-size: 1.2rem;
+    font-size: clamp(0.7rem, 2.5vw + 0.2rem, 1.2rem);
     color: var(--gold);
     text-shadow: 1px 1px 0 var(--pixel);
     text-align: center;
@@ -88,34 +104,40 @@ h1 {
     align-items: center;
 }
 
+/* ---- Start card: centered on any screen size ---- */
 #start{
     border: 4px solid var(--cyan);
     border-radius: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.4em;
-    line-height: 2.4rem;
+    padding: var(--pad);
+    line-height: 1.8;
     position: fixed;
-    top: 20rem;
-    left: 5em;
-    width: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(90%, 42rem);
+    max-height: 90vh;
+    max-height: 90dvh;
+    overflow-y: auto;
     background: var(--card);
     box-shadow: 6px 6px 0 var(--gold), 8px 8px 0 var(--magenta);
 }
 
 #start h3,
 #start-hide h3 {
-    font-size: 1.2rem;
+    font-size: var(--fs-h3);
     color: var(--gold);
     text-shadow: 1px 1px 0 var(--pixel);
     letter-spacing: 0.05em;
+    text-align: center;
 }
 
 #start p,
 #start-hide p {
-    font-size: 1rem;
-    max-width: 90%;
+    font-size: var(--fs-body);
+    max-width: 95%;
     text-align: center;
     color: var(--text-dim);
 }
@@ -123,7 +145,7 @@ h1 {
 #start button,
 #start-hide button {
     margin-top: 1em;
-    font-size: 0.95rem;
+    font-size: clamp(0.6rem, 1.8vw + 0.2rem, 0.95rem);
     padding: 0.6em 1.6em;
     background: linear-gradient(var(--gold), #caa000);
     color: #0b0b1a;
@@ -143,34 +165,36 @@ h1 {
     box-shadow: 0 0 0 var(--card);
 }
 
+/* ---- Question card ---- */
 #question {
     border: 4px solid var(--magenta);
     border-radius: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.4em;
-    min-width: 90%;
-    max-width: 90%;
+    padding: var(--pad);
+    width: 100%;
+    max-width: 52rem;
     background: var(--card);
     box-shadow: 6px 6px 0 var(--gold), 8px 8px 0 var(--cyan);
 }
-
-
 
 #question h2 {
     border: 2px solid var(--gold);
     border-radius: 0;
     display: flex;
     width: 100%;
-    height: 6rem;
+    min-height: 6rem;      /* was fixed height: text could overflow */
+    padding: 0.75em;
     justify-content: center;
     text-align: center;
     align-items: center;
-    font-size: 1.3rem;
+    line-height: 1.6;
+    font-size: var(--fs-q);
     color: var(--text);
     background: var(--bg-grid);
     text-shadow: 1px 1px 0 var(--pixel);
+    margin-bottom: 0.75em;
 }
 
 #question ol {
@@ -179,7 +203,7 @@ h1 {
     gap: 0.75em 1.4em;
     grid-template-columns: repeat(2, 1fr);
     box-sizing: border-box;
-    align-items: start;
+    align-items: stretch;
 }
 
 #question ol li {
@@ -196,10 +220,14 @@ h1 {
 
 #question ol li button {
     width: 100%;
+    height: 100%;
     border-radius: 0;
-    font-size: 0.8rem;
-    padding: 0.5em 0.4em;
+    font-size: var(--fs-btn);
+    line-height: 1.6;
+    padding: 0.7em 0.4em;
     background: var(--card);
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 #question ol li button.correct {
@@ -217,22 +245,42 @@ h1 {
 #nav {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.6em;
     width: 100%;
     padding: 0.4em;
     align-items: center;
 }
 
+/* ---- Category switch (full-width button under the nav) ---- */
+#catswitch {
+    width: 100%;
+    margin-top: 0.4em;
+}
+
+#catswitch button {
+    width: 100%;
+    padding: 0.7em 0.4em;
+    font-size: clamp(0.6rem, 1.8vw + 0.2rem, 0.95rem);
+    line-height: 1.6;
+    white-space: normal;       /* long category names wrap instead of overflowing */
+    overflow-wrap: anywhere;
+}
+
 button {
     width: max-content;
+    max-width: 100%;
+    min-height: 44px;      /* comfortable touch target on phones */
     padding: 0.5em 1.1em;
     border-radius: 2px;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: var(--fs-btn);
     background: linear-gradient(var(--card-light), var(--card));
     color: var(--text);
     border: 3px solid var(--pixel);
     box-shadow: 3px 3px 0 var(--gold);
     transition: transform 0.04s ease, box-shadow 0.04s ease;
+    touch-action: manipulation;
 }
 
 button:hover {
@@ -257,4 +305,70 @@ button.wrong {
     border-color: var(--red);
     color: var(--red);
     box-shadow: 3px 3px 0 var(--gold);
+}
+
+/* ==========================================================================
+   BREAKPOINTS
+   ========================================================================== */
+
+/* Tablets and small laptops */
+@media (max-width: 768px) {
+    #question ol {
+        gap: 0.6em 0.9em;
+    }
+}
+
+/* Phones: answers stack in ONE column */
+@media (max-width: 560px) {
+    body {
+        justify-content: flex-start;
+        padding-top: 1.25rem;
+    }
+
+    #question ol {
+        grid-template-columns: 1fr;
+    }
+
+    #question,
+    #start {
+        box-shadow: 4px 4px 0 var(--gold), 6px 6px 0 var(--cyan);
+    }
+
+    #question h2 {
+        min-height: 5rem;
+    }
+
+    #nav {
+        justify-content: center;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+    #question,
+    #start {
+        border-width: 3px;
+    }
+
+    h1 {
+        letter-spacing: 0.04em;
+    }
+}
+
+/* Phones turned sideways (short screens) */
+@media (max-height: 500px) and (orientation: landscape) {
+    body {
+        justify-content: flex-start;
+    }
+
+    #question h2 {
+        min-height: 3.5rem;
+    }
+}
+
+/* Respect users who don't want motion */
+@media (prefers-reduced-motion: reduce) {
+    button {
+        transition: none;
+    }
 }

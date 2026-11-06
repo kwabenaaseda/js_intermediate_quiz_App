@@ -7195,15 +7195,86 @@ elements.PREVQUEST.addEventListener('click',()=>{
     Prev()
 })
 
+document.getElementById("changeCat").addEventListener("click",()=>{
+    ChangeCategory();
+});
 
 
-function ForwardCategory(){
-    // First check for the category listing
-    // Find the index of the current one and increment
+
+function ChangeCategory(){
+    let fields = [];
+    INUSE.BANK.forEach(el=>{
+        if (fields.indexOf(el.field) === -1) fields.push(el.field);
+    });
+    if (!fields.length) return;
+    let current = PROGRESS.field;
+    let idx = fields.indexOf(current);
+    if (idx === -1) idx = 0;
+    else idx = (idx + 1) % fields.length;
+    setCategory(fields[idx]);
 }
 
 function RewindCategory(){
-    
+    let fields = [];
+    INUSE.BANK.forEach(el=>{
+        if (fields.indexOf(el.field) === -1) fields.push(el.field);
+    });
+    if (!fields.length) return;
+    let current = PROGRESS.field;
+    let idx = fields.indexOf(current);
+    if (idx === -1) idx = 0;
+    else idx = (idx - 1 + fields.length) % fields.length;
+    setCategory(fields[idx]);
+}
+
+function setCategory(field){
+    if (!field || !INUSE.BANK.length) return;
+    QA = { field:"", questions:[{}] };
+    INUSE.BANK.forEach(el=>{
+        if (el.field === field) QA = el;
+    });
+    PROGRESS.field = field;
+    PROGRESS.score = 0;
+    PROGRESS.questionNumber = 0;
+    PROGRESS.question = QA.questions.length ? QA.questions[0].question : "";
+    let data = { score:PROGRESS.score, field:PROGRESS.field, question:PROGRESS.question, questionNumber:PROGRESS.questionNumber };
+    sessionStorage.setItem('progress', JSON.stringify(data));
+    elements.FIELD.textContent = `Category: ${field}`;
+    renderQuestionBox();
+}
+
+function renderQuestionBox(){
+    elements.QUESTION.textContent = PROGRESS.question;
+    elements.SCORE.textContent = `SCORE: [ ${PROGRESS.score} / ${QA.questions.length} ]`;
+    elements.FIELD.textContent = `Category: ${PROGRESS.field}`;
+    elements.OPTIONS.innerHTML = '';
+    if (!QA.questions.length) return;
+    QA.questions.forEach(el=>{
+        if (el.question === PROGRESS.question){
+            el.options.forEach(option=>{
+                let li = document.createElement('li');
+                let button = document.createElement('button');
+                button.textContent = option;
+                button.id = option;
+                button.disabled = false;
+                button.addEventListener('click',()=>{
+                    IsCorrect(option);
+                    button.disabled = true;
+                    elements.OPTIONS.childNodes.forEach(el=>{
+                        if (el.nodeName === "LI"){
+                            el.childNodes.forEach(el=>{
+                                if (el.nodeName === "BUTTON"){
+                                    el.disabled = true;
+                                }
+                            });
+                        }
+                    });
+                });
+                li.append(button);
+                elements.OPTIONS.append(li);
+            });
+        }
+    });
 }
 
 
