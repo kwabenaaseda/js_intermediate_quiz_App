@@ -7363,7 +7363,7 @@ QA.questions.forEach(el=>{
         currentQuestion = el
     }
 })
-elements.SCORE.textContent =`[ ${PROGRESS.score} / ${QA.questions.length} ]`
+elements.SCORE.textContent =`SCORE: [ ${PROGRESS.score} / ${QA.questions.length} ]`
 elements.QUESTION.textContent = currentQuestion.question
 elements.FIELD.textContent = `Category: ${PROGRESS.field}`
 elements.OPTIONS.innerHTML = ''
