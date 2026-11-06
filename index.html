@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="c">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles/Index.css">
+</head>
+<body>
+    <h1>Online Quiz</h1>
+    <button id="endQ-hide">END QUIZ</button>
+    <h3 id="score-hide">[ 0 ] / 10</h3>
+    <!--START PAGE-->
+    <section id="start">
+                
+        <aside>
+            <h3>INSTRUCTIONS </h3>
+            <p>Press START to begin the quiz. 
+                Try your best to answer all the questions. Dont worry the correct answers will be shown to you if you fail. Have fun!
+            </p>
+        </aside>
+        <button id="startBtn">CLICK TO START</button>
+    </section>
+    <!--QUESTIONS STRUCTURE-->
+    <section id="question-hide">
+        <!--TEST QUESTIONS-->
+        <h2 id="questionShow"> </h2>
+        <ol id="options">
+           <!--  <li><button>KUMASI</button></li>
+            <li><button>KUMASI</button></li>
+            <li><button>KUMASI</button></li>
+            <li><button>KUMASI</button></li> -->
+        </ol>
+        <div id="nav">
+            <button id="prev">Prev</button>
+            <p> : <span id="field"></span> :</p>
+        <button id="next">Next</button>
+        </div>
+    </section>
+    <script src="./scripts/main.js"></script>
+</body>
+</html>
